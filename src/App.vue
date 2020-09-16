@@ -1,32 +1,40 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <button @click="get1">click1</button>
+    <button @click="get2">click2</button>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+  import mixin from './mixins/getDataFromAPI'
+  import store from '@/store'
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+  export default {
+    mixins: [mixin],
+    data: function () {
+      return {
+        data: {}
+      }
+    },
+    methods: {
+      get1 () {
+        // let regionsList = store.getters.getUniqueRegions
+        // let vatiantsAmount = store.getters.getVariantsAmount
+        console.log(
+          this.getSingleQuestion()
+        )
+      },
+      get2 () {
+        console.log(1)
+      }
+    },
+    mounted() {
+      store.dispatch('fillData')
     }
   }
-}
+  
+</script>
+
+<style lang="scss">
+
 </style>
