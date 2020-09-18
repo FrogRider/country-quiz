@@ -1,5 +1,5 @@
 <template>
-  <div class="card" :class="{'wrong-answer': failed}">
+  <div class="card" :class="{'wrong-answer': answer.index !== guessedAnswerIndex && guessedAnswerIndex !== null}">
     <div class="card__final" v-if="failed && variants.length === 0">
       <div class="card__final-title">
         You got <i>{{score}}</i> correct {{score === 1 ? 'answer' : 'answers'}}
@@ -29,7 +29,8 @@
         <div class="card__answer-title">{{variant.name}}</div>
       </div>
 
-      <div class="card__next">
+      <div class="card__bottom">
+        <HPBar :display="variants.length"/>
         <Btn 
           title="Next" 
           :class="{'disabled': guessedAnswerIndex === null}" 
@@ -48,10 +49,11 @@
   import mixin from '@/mixins/dataManipulating'
   import Btn from '@/components/startButton.vue'
   import FinalTitle from '@/components/finalTitle.vue'
-  // import store from '@/store'
+  import HPBar from '@/components/livesRemaining.vue'
+  import store from '@/store'
 
   export default {
-    components: {Btn, FinalTitle},
+    components: {Btn, FinalTitle, HPBar},
     mixins: [mixin],
     data: function () {
       return {
@@ -97,7 +99,12 @@
       guess (idx) {
         if (this.guessedAnswerIndex === null) {
           this.guessedAnswerIndex = idx
-          this.failed = idx !== this.answer.index
+          // this.failed = idx !== this.answer.index
+          if (idx !== this.answer.index) {
+            if(store.state.livesRemain !== 0) {
+              store.commit('minusHP')
+            }
+          } else this.score++
         }
       },
       reset (score = this.score) {
@@ -107,18 +114,22 @@
         this.failed = false
       },
       next () {
+        if(store.state.livesRemain === 0) {
+          this.failed = true
+        }
         if (this.failed === false) {
-          this.score++
-          this.reset()
-          this.fillVariants()
+          if (this.guessedAnswerIndex !== null) {
+            this.reset()
+            this.fillVariants()
+          }
         } else {
           this.variants = []
+          store.commit('HPreset')
         }
       },
       newGame () {
         this.reset(0)
         this.fillVariants()
-
       }
     },
     watch: {
@@ -246,10 +257,11 @@
       }
     }
 
-    &__next {
+    &__bottom {
       margin-top: 25px;
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
+      justify-content: space-between;
     }
 
     &__final {

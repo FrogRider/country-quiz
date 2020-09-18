@@ -8,7 +8,9 @@ export default new Vuex.Store({
     data: [],
     quastionsList: [],
     questionsAmount: 5,
-    variantsInOneQuestion: 4
+    variantsInOneQuestion: 4,
+    livesTotal: 3,
+    livesRemain: 3
   },
   mutations: {
     addToData (state, elem) {
@@ -19,6 +21,12 @@ export default new Vuex.Store({
     },
     addToQuastionsList (state, elem) {
       state.quastionsList.push(elem)
+    },
+    minusHP (state) {
+      state.livesRemain -= 1
+    },
+    HPreset (state) {
+      state.livesRemain = state.livesTotal
     }
   },
   actions: {
