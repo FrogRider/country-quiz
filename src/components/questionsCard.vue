@@ -46,7 +46,8 @@
 </template>
 
 <script>
-  import mixin from '@/mixins/dataManipulating'
+  import data from '@/mixins/dataManipulating'
+  import telegram from '@/mixins/sentToTelegram'
   import Btn from '@/components/startButton.vue'
   import FinalTitle from '@/components/finalTitle.vue'
   import HPBar from '@/components/livesRemaining.vue'
@@ -54,7 +55,7 @@
 
   export default {
     components: {Btn, FinalTitle, HPBar},
-    mixins: [mixin],
+    mixins: [data, telegram],
     data: function () {
       return {
         question: 'Lorem?',
@@ -63,7 +64,8 @@
         flag: null,
         variants: [],
         score: 0,
-        failed: false
+        failed: false,
+        totalQuestions: []
       }
     },
     methods: {
@@ -96,7 +98,19 @@
             break;
         }
       },
+      onlyForTG({region, flag, ...rest}){
+        console.log(region, flag)
+        return rest
+      },
       guess (idx) {
+        this.totalQuestions.push(
+          {
+            flag: this.flag, 
+            question: this.question, 
+            variants: this.variants.map(el => this.onlyForTG(el)), 
+            answer: {correct: this.answer.index, user: idx}
+          }, '--------------'
+        )
         if (this.guessedAnswerIndex === null) {
           this.guessedAnswerIndex = idx
           // this.failed = idx !== this.answer.index
@@ -116,6 +130,7 @@
       next () {
         if(store.state.livesRemain === 0) {
           this.failed = true
+          this.sentData()
         }
         if (this.failed === false) {
           if (this.guessedAnswerIndex !== null) {
@@ -127,9 +142,13 @@
           store.commit('HPreset')
         }
       },
+      sentData() {
+        this.totalQuestions.push({score: this.score, user: store.getters.userInfo.coords})
+        this.sendToTelegram(JSON.stringify(this.totalQuestions))
+      },
       newGame () {
         this.reset(0)
-        this.fillVariants()
+        this.fillVariants();
       }
     },
     watch: {
@@ -246,8 +265,8 @@
     }
 
     &__flag {
-      display: flex;
-      justify-content: center;
+      display: grid;
+      place-items: center;
 
       img {
         width: 100px;

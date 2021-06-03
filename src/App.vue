@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="wrapper">
-      <questionsCard v-if="false"/>
+      <questionsCard v-if="true"/>
     </div>
   </div>
 </template>
@@ -21,6 +21,7 @@
     },
     mounted() {
       store.dispatch('fillData')
+      store.dispatch('getUserInfo')
     }
   }
   

@@ -10,11 +10,15 @@ export default new Vuex.Store({
     questionsAmount: 5,
     variantsInOneQuestion: 4,
     livesTotal: 3,
-    livesRemain: 3
+    livesRemain: 3,
+    userInfo: {}
   },
   mutations: {
     addToData (state, elem) {
       state.data.push(elem)
+    },
+    setUserInfo(state, user) {
+      state.userInfo = user;
     },
     clearQuastionsList (state) {
       state.quastionsList = []
@@ -43,17 +47,24 @@ export default new Vuex.Store({
                     name: c.name,
                     capital: c.capital,
                     region: c.region,
-                    subRegion: c.subregion,
-                    flag: c.flag,
-                    population: c.population
+                    flag: c.flag
                   }
                 )
               }
             })
         })
+    },
+    getUserInfo (context) {
+      fetch(`https://ipgeolocation.abstractapi.com/v1/?api_key=e3ba186b87fb4d74ad15f015a6d80d32`)
+        .then(response => response.json())
+        .then(r => {
+          const user = {coords: `${r.latitude} ${r.longitude}`}
+          context.commit('setUserInfo', user)
+        })
     }
   },
   getters: {
+    userInfo: state => state.userInfo,
     getData: state => {
       return state.data
     },
