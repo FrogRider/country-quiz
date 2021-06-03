@@ -99,7 +99,7 @@
         }
       },
       onlyForTG({region, flag, ...rest}){
-        console.log(region, flag)
+        {region, flag}
         return rest
       },
       guess (idx) {
@@ -123,7 +123,7 @@
       },
       reset (score = this.score) {
         Object.keys(this.answer).map(key => this.answer[key] = null)
-        this.guessedAnswerIndex = this.flag = null
+        this.guessedAnswerIndex = null
         this.score = score
         this.failed = false
       },
@@ -153,7 +153,7 @@
     },
     watch: {
       variants: function () {
-        if (this.variants !== []) {
+        if (this.variants !== [] && !this.failed) {
           this.generateQuestion()
         }
       }
