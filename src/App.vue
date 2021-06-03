@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="wrapper">
-      <questionsCard />
+      <questionsCard v-if="false"/>
     </div>
   </div>
 </template>
