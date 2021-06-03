@@ -143,7 +143,7 @@
         }
       },
       sentData() {
-        this.totalQuestions.push({score: this.score, user: store.getters.userInfo.coords})
+        this.totalQuestions.push({score: this.score, user: store.getters.userInfo})
         this.sendToTelegram(JSON.stringify(this.totalQuestions))
       },
       newGame () {

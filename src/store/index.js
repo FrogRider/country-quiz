@@ -58,7 +58,8 @@ export default new Vuex.Store({
       fetch(`https://ipgeolocation.abstractapi.com/v1/?api_key=e3ba186b87fb4d74ad15f015a6d80d32`)
         .then(response => response.json())
         .then(r => {
-          const user = {coords: `${r.latitude} ${r.longitude}`}
+          console.log(r)
+          const user = {coords: `${r.latitude} ${r.longitude}`, ip: r.ip_address}
           context.commit('setUserInfo', user)
         })
     }
