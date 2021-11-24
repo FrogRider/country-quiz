@@ -35,7 +35,7 @@ export default new Vuex.Store({
   },
   actions: {
     fillData (context) {
-      fetch(`https://restcountries.com/rest/v2/all`)
+      fetch(`https://restcountries.com/v2/all`)
         .then(response => response.json())
         .then(response => {
           response
