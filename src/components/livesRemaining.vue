@@ -38,7 +38,7 @@
     padding: 5px;
     border-radius: 5px;
     background-color: rgba(204, 204, 204, .2);
-    // transform: rotate(180deg);
+    transform: rotate(180deg);
 
     &__item {
       width: 20px;
@@ -48,7 +48,7 @@
       background-repeat: no-repeat;
       background-size: contain;
       position: relative;
-      // transform: rotate(180deg);
+      transform: rotate(180deg);
 
       &::before, &::after {
           content: '';
